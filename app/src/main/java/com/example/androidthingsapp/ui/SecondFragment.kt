@@ -5,8 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.view.animation.LinearInterpolator
 import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -39,7 +42,7 @@ class SecondFragment : Fragment() {
         val selectedItems = arguments?.getParcelableArrayList<TeamViewModel>("selected_items")!!
         getRandom(selectedItems)
         initList(selectedItems)
-
+        animateChosen()
         view.findViewById<Button>(R.id.button_second).setOnClickListener {
             findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
         }
@@ -51,7 +54,7 @@ class SecondFragment : Fragment() {
     }
 
     private fun getRandom(selectedItems: ArrayList<TeamViewModel>) {
-        val randomItem = (0..selectedItems.size-1).random()
+        val randomItem = (0..selectedItems.size - 1).random()
         view?.let { setChosenItem(it, selectedItems.get(randomItem)) }
         removeItem(selectedItems, randomItem)
     }
@@ -80,5 +83,14 @@ class SecondFragment : Fragment() {
         )
         home_recycler_view.setLayoutAnimation(controller)
         home_recycler_view.scheduleLayoutAnimation()
+    }
+
+    private fun animateChosen() {
+        view?.findViewById<CardView>(R.id.card_view)?.translationY = 800f
+        view?.findViewById<CardView>(R.id.card_view)?.animate()
+            ?.translationY(0f)
+            ?.setInterpolator(LinearInterpolator())
+            ?.setStartDelay(200)
+            ?.start()
     }
 }
